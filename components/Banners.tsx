@@ -23,6 +23,9 @@ export default function Banners() {
   const fetchBanners = useCallback(async () => {
     try {
       const res = await fetch(`${api}/banner`);
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
       const data = await res.json();
       if (data.banners && data.banners.length > 0) {
         // Pad or trim to exactly 3 banners
@@ -35,7 +38,8 @@ export default function Banners() {
         setBanners(newBanners);
       }
     } catch (err) {
-      console.error(err);
+      console.error("Failed to fetch banners:", err);
+      // Optional: alert("Could not connect to the backend server.");
     }
   }, [api]);
 

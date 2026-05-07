@@ -42,9 +42,12 @@ export default function Categories() {
   const fetchCategories = useCallback(async () => {
     try {
       const res = await fetch(`${api}/category`);
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       const data = await res.json();
       if (data.categories) setCategories(data.categories);
-    } catch (e) { console.error(e); }
+    } catch (e) {
+      console.error("Failed to fetch categories:", e);
+    }
   }, [api]);
 
   useEffect(() => { fetchCategories(); }, [fetchCategories]);
