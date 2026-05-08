@@ -9,7 +9,7 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [checking, setChecking] = useState(true);
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5001/api';
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5556/api';
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -65,7 +65,14 @@ export default function LoginPage() {
         throw new Error("No token received from server");
       }
     } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred";
+      // Provide a clearer message for network-level failures (e.g. backend not running or CORS)
+      let errorMessage = "An unexpected error occurred";
+      if (err instanceof TypeError) {
+        // TypeError is commonly thrown for network errors like "Failed to fetch"
+        errorMessage = `Network error: could not reach API at ${apiUrl}. Is the backend running? (CORS or network issue)`;
+      } else if (err instanceof Error) {
+        errorMessage = err.message;
+      }
       console.error("Login error:", errorMessage, err);
       setError(errorMessage);
     } finally {
