@@ -149,7 +149,7 @@ export default function Banners() {
                 <Field label="Desktop Image (1920x800px)">
                   {banner.desktopImage ? (
                     <div style={{ position: "relative", marginTop: "12px" }}>
-                      <Image src={banner.desktopImage} alt="Desktop" width={400} height={160} className="preview-img" unoptimized />
+                      <Image src={banner.desktopImage} alt="Desktop" width={400} height={160} className="preview-img" unoptimized style={{ width: 'auto', height: 160 }} />
                       <button className="remove-btn" onClick={() => removeImage(index, "desktop")}>✕</button>
                     </div>
                   ) : (
@@ -166,7 +166,7 @@ export default function Banners() {
                 <Field label="Mobile Image (800x1200px)">
                   {banner.mobileImage ? (
                     <div style={{ position: "relative", marginTop: "12px" }}>
-                      <Image src={banner.mobileImage} alt="Mobile" width={200} height={160} className="preview-img" style={{ objectFit: 'contain' }} unoptimized />
+                      <Image src={banner.mobileImage} alt="Mobile" width={200} height={160} className="preview-img" style={{ objectFit: 'contain', width: 'auto', height: 160 }} unoptimized />
                       <button className="remove-btn" onClick={() => removeImage(index, "mobile")}>✕</button>
                     </div>
                   ) : (
