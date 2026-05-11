@@ -7,15 +7,19 @@ type Banner = {
   desktopImage: string;
   mobileImage: string;
   isActive: boolean;
+  tag: string;
+  headline: string;
+  subheadline: string;
+  align: "left" | "center" | "right";
 };
 
 type FieldProps = { label: string; children: ReactNode };
 
 export default function Banners() {
   const [banners, setBanners] = useState<Banner[]>([
-    { desktopImage: "", mobileImage: "", isActive: true },
-    { desktopImage: "", mobileImage: "", isActive: true },
-    { desktopImage: "", mobileImage: "", isActive: true },
+    { desktopImage: "", mobileImage: "", isActive: true, tag: "", headline: "", subheadline: "", align: "left" },
+    { desktopImage: "", mobileImage: "", isActive: true, tag: "", headline: "", subheadline: "", align: "left" },
+    { desktopImage: "", mobileImage: "", isActive: true, tag: "", headline: "", subheadline: "", align: "left" },
   ]);
   const [loading, setLoading] = useState(false);
   const api = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'; 
@@ -31,9 +35,9 @@ export default function Banners() {
         // Pad or trim to exactly 3 banners
         const fetchedBanners = data.banners;
         const newBanners = [
-          fetchedBanners[0] || { desktopImage: "", mobileImage: "", isActive: true },
-          fetchedBanners[1] || { desktopImage: "", mobileImage: "", isActive: true },
-          fetchedBanners[2] || { desktopImage: "", mobileImage: "", isActive: true },
+          { tag: "", headline: "", subheadline: "", align: "left", ...fetchedBanners[0] } || { desktopImage: "", mobileImage: "", isActive: true, tag: "", headline: "", subheadline: "", align: "left" },
+          { tag: "", headline: "", subheadline: "", align: "left", ...fetchedBanners[1] } || { desktopImage: "", mobileImage: "", isActive: true, tag: "", headline: "", subheadline: "", align: "left" },
+          { tag: "", headline: "", subheadline: "", align: "left", ...fetchedBanners[2] } || { desktopImage: "", mobileImage: "", isActive: true, tag: "", headline: "", subheadline: "", align: "left" },
         ];
         setBanners(newBanners);
       }
@@ -69,6 +73,14 @@ export default function Banners() {
       } else {
         newBanners[index].mobileImage = b64;
       }
+      return newBanners;
+    });
+  };
+
+  const handleTextChange = (index: number, field: keyof Banner, value: string) => {
+    setBanners(prev => {
+      const newBanners = [...prev];
+      (newBanners[index] as any)[field] = value;
       return newBanners;
     });
   };
@@ -124,6 +136,11 @@ export default function Banners() {
         .preview-img { width: 100%; height: 160px; object-fit: cover; border-radius: 6px; }
         .remove-btn { position: absolute; top: 24px; right: 24px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; }
         .remove-btn:hover { background: #ef4444; }
+        .text-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 20px; padding-top: 20px; border-top: 1px solid #1e1e2e; }
+        .input-group { display: flex; flexDirection: column; gap: 8px; }
+        .admin-input { background: #1a1a24; border: 1px solid #2a2a35; border-radius: 6px; padding: 10px; color: #fff; font-size: 14px; width: 100%; outline: none; }
+        .admin-input:focus { border-color: #db2777; }
+        .admin-select { background: #1a1a24; border: 1px solid #2a2a35; border-radius: 6px; padding: 10px; color: #fff; font-size: 14px; width: 100%; outline: none; }
       `}</style>
 
       {/* Header */}
@@ -176,6 +193,51 @@ export default function Banners() {
                     </label>
                   )}
                 </Field>
+              </div>
+            </div>
+
+            {/* Text Customization */}
+            <div className="text-inputs">
+              <div className="input-group">
+                <div style={{ fontSize: 12, fontWeight: 600, color: "#8f8fb1", marginBottom: 4 }}>Tag</div>
+                <input 
+                  className="admin-input" 
+                  placeholder="e.g. New Arrivals" 
+                  value={banner.tag} 
+                  onChange={(e) => handleTextChange(index, "tag", e.target.value)}
+                />
+              </div>
+              <div className="input-group">
+                <div style={{ fontSize: 12, fontWeight: 600, color: "#8f8fb1", marginBottom: 4 }}>Headline</div>
+                <input 
+                  className="admin-input" 
+                  placeholder="e.g. Summer Collection" 
+                  value={banner.headline} 
+                  onChange={(e) => handleTextChange(index, "headline", e.target.value)}
+                />
+              </div>
+              <div className="input-group" style={{ gridColumn: "span 1" }}>
+                <div style={{ fontSize: 12, fontWeight: 600, color: "#8f8fb1", marginBottom: 4 }}>Subheadline</div>
+                <textarea 
+                  className="admin-input" 
+                  rows={1}
+                  placeholder="e.g. Explore our latest styles" 
+                  value={banner.subheadline} 
+                  onChange={(e) => handleTextChange(index, "subheadline", e.target.value)}
+                  style={{ resize: "none" }}
+                />
+              </div>
+              <div className="input-group">
+                <div style={{ fontSize: 12, fontWeight: 600, color: "#8f8fb1", marginBottom: 4 }}>Alignment</div>
+                <select 
+                  className="admin-select"
+                  value={banner.align}
+                  onChange={(e) => handleTextChange(index, "align", e.target.value)}
+                >
+                  <option value="left">Left</option>
+                  <option value="center">Center</option>
+                  <option value="right">Right</option>
+                </select>
               </div>
             </div>
           </div>
