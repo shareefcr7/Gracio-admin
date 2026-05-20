@@ -61,7 +61,7 @@ export default function Products() {
   const [categoryId, setCategoryId] = useState("");
   const [subcategoryId, setSubcategoryId] = useState("");
   const [variants, setVariants]     = useState<Variant[]>([{ ...BLANK_VARIANT(), isDefault: true }]);
-  const api = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+  const api = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
 
   const fetchProducts = useCallback(async () => {
     try {

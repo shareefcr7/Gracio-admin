@@ -36,7 +36,7 @@ export default function Categories() {
   const [name, setName] = useState("");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
-  const api = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+  const api = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
   const token = () => localStorage.getItem("token") || "";
 
   const fetchCategories = useCallback(async () => {

@@ -22,7 +22,7 @@ export default function Banners() {
     { desktopImage: "", mobileImage: "", isActive: true, tag: "", headline: "", subheadline: "", align: "left" },
   ]);
   const [loading, setLoading] = useState(false);
-  const api = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'; 
+  const api = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api'; 
 
   const fetchBanners = useCallback(async () => {
     try {
@@ -108,6 +108,7 @@ export default function Banners() {
     }
   };
 
+  // Remove a single image (desktop or mobile)
   const removeImage = (index: number, type: "desktop" | "mobile") => {
     setBanners(prev => {
       const newBanners = [...prev];
@@ -116,6 +117,16 @@ export default function Banners() {
       } else {
         newBanners[index].mobileImage = "";
       }
+      return newBanners;
+    });
+  };
+
+  // Clear both images for a banner (admin convenience)
+  const clearBannerImages = (index: number) => {
+    setBanners(prev => {
+      const newBanners = [...prev];
+      newBanners[index].desktopImage = "";
+      newBanners[index].mobileImage = "";
       return newBanners;
     });
   };
